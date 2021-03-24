@@ -9,6 +9,9 @@ export class CommentService {
     @InjectRepository(Comments)
     private commentesRepository: Repository<Comments>, // @InjectRepository(Comment) // private commenteRepository: Repository<Comment>,
   ) {}
+  async findAll() {
+    return await this.commentesRepository.find();
+  }
   async addComment(addObject) {
     const item = { type: addObject.type, answer: addObject.answer };
     // console.log(item);
@@ -43,7 +46,12 @@ export class CommentService {
   }
 
   async findAnswer(name: string) {
-    const answers = this.commentesRepository.find({ name });
+    const answers = await this.commentesRepository.find({ name });
     return answers;
+  }
+  async deleteAll() {
+    const data = await this.commentesRepository.find();
+    this.commentesRepository.remove(data);
+    return null;
   }
 }
